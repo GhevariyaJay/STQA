@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Information System - Parul University</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(
+                rgba(255, 255, 255, 0.9),
+                rgba(230, 236, 245, 0.95)
+            ), url('parulimg.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 95%;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+            border-radius: 2px;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        #enrollmentNumber {
+            padding: 15px 25px;
+            width: 300px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50px;
+            font-size: 16px;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        #enrollmentNumber:focus {
+            outline: none;
+            border-color: rgba(59, 130, 246, 0.8);
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+            transform: scale(1.02);
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 50%;
+            left: 25px;
+            transform: translateY(-50%);
+            background: white;
+            padding: 0 10px;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            color: #666;
+            border-radius: 20px;
+        }
+
+        #enrollmentNumber:focus + label,
+        #enrollmentNumber:not(:placeholder-shown) + label {
+            top: -10px;
+            left: 20px;
+            font-size: 14px;
+            color: #3b82f6;
+            font-weight: 500;
+            background: white;
+            padding: 0 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn {
+            padding: 15px 35px;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-btn {
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+        }
+
+        .reset-btn {
+            background: linear-gradient(45deg, #ef4444, #dc2626);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .result-container {
+            margin-top: 30px;
+            padding: 30px;
+            border-radius: 15px;
+            display: none;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            animation: fadeIn 0.5s ease;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px);
+                filter: blur(10px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        .field {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .field:hover {
+            background: rgba(255, 255, 255, 0.95);
+            transform: translateX(5px);
+        }
+
+        .field:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .label {
+            font-weight: 600;
+            color: #2d3748;
+            display: inline-block;
+            width: 140px;
+            position: relative;
+        }
+
+        .label::after {
+            content: ':';
+            position: absolute;
+            right: 20px;
+            color: #a0aec0;
+        }
+
+        .value {
+            color: #4a5568;
+            transition: color 0.3s ease;
+        }
+
+        .field:hover .value {
+            color: #3b82f6;
+        }
+
+        .loading {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-state {
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+        }
+
+        .success-state {
+            background: #f0fff4;
+            border: 1px solid #c6f6d5;
+        }
+
+        /* Developer Credits Styles */
+        .developer-credits {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+            color: #2d3748;
+            text-align: right;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .developer-credits:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .developer-credits h3 {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2d3748;
+            font-size: 16px;
+        }
+
+        .developer-credits p {
+            margin: 4px 0;
+            color: #4a5568;
+            transition: all 0.3s ease;
+        }
+
+        .developer-credits p:hover {
+            color: #3b82f6;
+            transform: translateX(-5px);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            #enrollmentNumber {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .label {
+                display: block;
+                margin-bottom: 5px;
+                width: 100%;
+            }
+
+            .label::after {
+                display: none;
+            }
+
+            .field {
+                padding: 15px 10px;
+            }
+
+            .input-group label {
+                left: 20px;
+            }
+
+            .developer-credits {
+                position: fixed;
+                bottom: 10px;
+                right: 10px;
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Student Information System</h1>
+        
+        <div class="input-group">
+            <input type="text" id="enrollmentNumber" name="enrollmentNumber" placeholder=" ">
+            <label for="enrollmentNumber">Enter Enrollment Number</label>
+            <button class="btn search-btn" onclick="searchStudent()">
+                Search
+                <div class="loading"></div>
+            </button>
+            <button class="btn reset-btn" onclick="resetForm()" style="display: none;">
+                Reset
+            </button>
+        </div>
+
+        <div id="resultContainer" class="result-container">
+            <div class="field">
+                <span class="label">Full Name</span>
+                <span class="value" id="fullName"></span>
+            </div>
+            <div class="field">
+                <span class="label">Program</span>
+                <span class="value" id="program"></span>
+            </div>
+            <div class="field">
+                <span class="label">Course</span>
+                <span class="value" id="course"></span>
+            </div>
+            <div class="field">
+                <span class="label">Campus</span>
+                <span class="value" id="campus"></span>
+            </div>
+            <div class="field">
+                <span class="label">Email</span>
+                <span class="value" id="email"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Developer Credits Section -->
+    <div class="developer-credits">
+        <h3>DEVELOPERS</h3>
+        <p>Dev Mangukiya</p>
+        <p>Jay Gheveriya</p>
+        <p>Bhargav Parmar</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
